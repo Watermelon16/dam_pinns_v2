@@ -15,7 +15,8 @@ from io import BytesIO
 import sqlite3
 import threading
 from contextlib import contextmanager
-
+import streamlit as st
+import plotly.graph_objects as go
 
 # Thêm class mạng PINNs
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -402,30 +403,65 @@ def plot_loss_curve(loss_history):
 
 
 # --- Hàm tạo biểu đồ mặt cắt thực tế ---
-def create_actual_dam_profile(H_opt, B_opt, H_total, B_top):
+def create_actual_dam_profile(H_opt, n, m, xi, H_total, B_top):
     """
-    Tạo mặt cắt thực tế từ mặt cắt tối ưu bằng cách thêm đỉnh đập hình chữ nhật.
+    Tạo mặt cắt thực tế từ mặt cắt tối ưu bằng cách thêm đỉnh đập nối tiếp phía trên.
 
     Parameters:
     - H_opt: chiều cao mặt cắt tối ưu
-    - B_opt: chiều rộng đáy đập
-    - H_total: chiều cao thực tế của đập
+    - n, m, xi: tham số hình học của mặt cắt tối ưu
+    - H_total: chiều cao đập thực tế
     - B_top: chiều rộng đỉnh đập
     """
-    x1 = 0
-    x2 = B_opt
-    x3 = (B_opt - B_top) / 2
-    x4 = x3 + B_top
+    # Tính các điểm 1, 2, 3, 4 (tối ưu)
+    x0 = 0
+    x1 = n * H_opt * (1 - xi)
+    x3 = x1
+    x4 = x3 + m * H_opt
+
     y0 = 0
-    y1 = H_opt
-    y2 = H_total
+    y1 = H_opt * (1 - xi)
+    y2 = H_opt
+    yT = H_total
 
-    x = [x1, x2, x4, x3, x1]
-    y = [y0, y0, y2, y2, y0]
+    # Tọa độ điểm 1 → 4
+    p1 = (x0, y0)
+    p2 = (x1, y1)
+    p3 = (x1, y2)
+    p4 = (x4, y0)
 
+    # Tính điểm 6, 5 từ B_top và H_total
+    xt3 = x1 + (m * H_opt - B_top) / 2
+    xt4 = xt3 + B_top
+
+    # Tính đường thẳng qua 6-7, cắt đoạn 3-4
+    # Gọi 6 = (xt3, H_total), 7 là giao với đoạn (p3)→(p4)
+    x6, y6 = xt3, yT
+    x3_, y3_ = x1, y2
+    x4_, y4_ = x4, y0
+
+    # Tìm giao điểm đường thẳng: y = y6 + a(x - x6) với đoạn (3)-(4)
+    a = (y6 - y2) / (xt3 - x1)
+    x7 = (y2 - y0 + a * x6 - a * x4) / (a - (y2 - y0) / (x1 - x4))
+    y7 = y0 + (y2 - y0) / (x1 - x4) * (x7 - x4)
+
+    # Các điểm hình học mới
+    p5 = (xt3, yT)
+    p6 = (xt4, yT)
+    p7 = (x7, y7)
+
+    # Vẽ mặt cắt
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=x[:3], y=y[:3], fill='toself', mode='lines', name='Mặt cắt tối ưu'))
-    fig.add_trace(go.Scatter(x=[x3, x4, x4, x3, x3], y=[y1, y1, y2, y2, y1], fill='toself', mode='lines', name='Đỉnh đập'))
+
+    # Mặt cắt tối ưu (tam giác)
+    x_opt = [p1[0], p2[0], p3[0], p4[0], p1[0]]
+    y_opt = [p1[1], p2[1], p3[1], p4[1], p1[1]]
+    fig.add_trace(go.Scatter(x=x_opt, y=y_opt, fill='toself', mode='lines', name='Mặt cắt tối ưu'))
+
+    # Đỉnh đập thực tế (hình thang hoặc hình 6 cạnh)
+    x_real = [p3[0], p5[0], p6[0], p7[0], p4[0], p3[0]]
+    y_real = [p3[1], p5[1], p6[1], p7[1], p4[1], p3[1]]
+    fig.add_trace(go.Scatter(x=x_real, y=y_real, fill='toself', mode='lines', name='Đỉnh đập'))
 
     fig.update_layout(
         title="Mặt cắt thực tế của đập bê tông trọng lực",
@@ -433,8 +469,8 @@ def create_actual_dam_profile(H_opt, B_opt, H_total, B_top):
         yaxis_title="Chiều cao (m)",
         xaxis=dict(scaleanchor="y", scaleratio=1),
         showlegend=True,
-        width=700,
-        height=500,
+        width=800,
+        height=550,
         plot_bgcolor='white'
     )
 
@@ -455,5 +491,5 @@ else:
         submitted = st.form_submit_button("Vẽ mặt cắt thực tế")
 
     if submitted:
-        fig = create_actual_dam_profile(H_opt=result['H'], B_opt=result['B'], H_total=H_total, B_top=B_top)
+        fig = create_actual_dam_profile(H_opt=result['H'], n=result['n'], m=result['m'], xi=result['xi'], H_total=H_total, B_top=B_top)
         st.plotly_chart(fig, use_container_width=True)
