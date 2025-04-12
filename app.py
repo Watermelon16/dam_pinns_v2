@@ -4,6 +4,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrow
 import streamlit as st
+# Thiết lập trang Streamlit
+st.set_page_config(
+    page_title="Tối ưu mặt cắt đập bê tông trọng lực",
+    page_icon="🏞️",
+    layout="wide",
+    initial_sidebar_state="expanded")
 import pandas as pd
 import plotly.graph_objects as go
 from datetime import datetime
@@ -123,13 +129,6 @@ def get_excel_download_link(df, filename):
     href = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="{filename}">📥 Tải xuống báo cáo Excel</a>'
     return href
 
-# Thiết lập trang Streamlit
-st.set_page_config(
-    page_title="Tối ưu mặt cắt đập bê tông trọng lực",
-    page_icon="🏞️",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
 
 # Tiêu đề ứng dụng
 st.title("🏞️ Tối ưu mặt cắt đập bê tông trọng lực sử dụng PINNs")
