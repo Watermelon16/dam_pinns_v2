@@ -60,7 +60,7 @@ def create_excel_report(result):
             'Trọng lượng đập (G)',
             'Lực chống trượt (Fct)',
             'Lực gây trượt (Fgt)',
-            'Tổng momen (M0)'
+            'Tổng momen (M0)',
             'Số vòng lặp thực tế',
             'Số vòng lặp tối đa',
             'Thời gian tính toán (giây)'
