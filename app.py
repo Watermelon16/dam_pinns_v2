@@ -420,6 +420,18 @@ with tabs[0]:
                             B_top=B_top)
                 st.plotly_chart(fig_real, use_container_width=True)
 
+            # 👉 Gọi hàm xuất DXF
+            from pinns_optimizer import export_actual_dam_profile_to_dxf
+                dxf_path = export_actual_dam_profile_to_dxf(
+                    H_opt=result['H'], n=result['n'], m=result['m'], xi=result['xi'],
+                    H_total=H_total, B_top=B_top)
+
+            with open(dxf_path, "rb") as f:
+                    dxf_bytes = f.read()
+                    b64 = base64.b64encode(dxf_bytes).decode()
+                    href = f'<a href="data:application/dxf;base64,{b64}" download="mat_cat_dap.dxf">📥 Tải file AutoCAD (.dxf)</a>'
+                    st.markdown(href, unsafe_allow_html=True)
+
 
 # Tab Lịch sử tính toán
 with tabs[1]:
