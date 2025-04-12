@@ -73,11 +73,12 @@ def compute_physics(n, xi, m, H, gamma_bt, gamma_n, f, C, a1):
     l1  = H / 3
     M0 = -G1 * lG1 - G2 * lG2 + Wt * lt - W2_1 * l2 - W2_2 * l22 + W1 * l1
     sigma = P / B - 6 * M0 / B**2
+    sigma_2= P / B + 6 * M0 / B**2
     Fct = f * (G + W2 - Wt) + C * H * (m + n * (1 - xi))
     Fgt = 0.5 * gamma_n * H**2
     K = Fct / Fgt
     A = 0.5 * H**2 * (m + n * (1 - xi)**2)
-    return sigma, K, A, G, W1, W2, Wt, Fct, Fgt, B, M0, G1, G2, W2_1, W2_2, lG1, lG2, lt, l2, l22, l1, P
+    return sigma, sigma_2, K, A, G, W1, W2, Wt, Fct, Fgt, B, M0, G1, G2, W2_1, W2_2, lG1, lG2, lt, l2, l22, l1, P
 
 # Hàm mất mát cải tiến
 def loss_function(sigma, K, A, Kc, alpha):
@@ -149,7 +150,7 @@ def optimize_dam_section(H, gamma_bt, gamma_n, f, C, Kc, a1, max_iterations=5000
         n, m, xi = model(data)
         
     # Tính toán các đại lượng vật lý với tham số tối ưu
-    sigma, K, A, G, W1, W2, Wt, Fct, Fgt, B, M0, G1, G2, W2_1, W2_2, lG1, lG2, lt, l2, l22, l1, P = compute_physics(n, xi, m, H, gamma_bt, gamma_n, f, C, a1)
+    sigma, sigma_2, K, A, G, W1, W2, Wt, Fct, Fgt, B, M0, G1, G2, W2_1, W2_2, lG1, lG2, lt, l2, l22, l1, P = compute_physics(n, xi, m, H, gamma_bt, gamma_n, f, C, a1)
     
     # Tính độ lệch tâm
     e = B/2 - M0/P
@@ -177,6 +178,7 @@ def optimize_dam_section(H, gamma_bt, gamma_n, f, C, Kc, a1, max_iterations=5000
         'A': get_value(A),
         'K': get_value(K),
         'sigma': get_value(sigma),
+        'sigma_2': get_value(sigma_2),
         'G': get_value(G),
         'G1': get_value(G1),
         'G2': get_value(G2),

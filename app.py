@@ -50,15 +50,18 @@ def create_excel_report(result):
             'Tham số ξ',
             'Diện tích mặt cắt (A)',
             'Hệ số ổn định (K)',
-            'Ứng suất mép thượng lưu (σ)',
+            'Ứng suất mép thượng lưu (σ_TL)',
             'Chiều rộng đáy đập (B)',
             'Độ lệch tâm (e)',
-            'Lực đẩy nổi (W1)',
-            'Lực đẩy ngang (W2)',
+            'Áp lực nước thượng lưu nằm ngang (W1)',
+            'Áp lực nước thượng lưu thẳng đứng (W2)',
             'Áp lực thấm (Wt)',
             'Trọng lượng đập (G)',
             'Lực chống trượt (Fct)',
             'Lực gây trượt (Fgt)',
+            'Tổng momen (M0)'
+            'Ứng suất mép hạ lưu (σ_HL) '
+            'Hệ số ổn định trượt (K)'
             'Số vòng lặp thực tế',
             'Số vòng lặp tối đa',
             'Thời gian tính toán (giây)'
@@ -77,6 +80,7 @@ def create_excel_report(result):
             result['A'],
             result['K'],
             result['sigma'],
+            result['sigma_2'],
             result['B'],
             result['e'],
             result['W1'],
@@ -85,6 +89,8 @@ def create_excel_report(result):
             result['G'],
             result['Fct'],
             result['Fgt'],
+            result['M0'],
+            result['K'],
             result['iterations'],
             result.get('max_iterations', 5000),
             result.get('computation_time', 0)
@@ -103,6 +109,7 @@ def create_excel_report(result):
             'm²',
             '',
             'T/m²',
+            'T/m²',
             'm',
             'm',
             'T/m',
@@ -111,6 +118,8 @@ def create_excel_report(result):
             'T/m',
             'T/m',
             'T/m',
+            'Tm/m',
+            '',
             'vòng',
             'vòng',
             's'
@@ -346,7 +355,7 @@ with tabs[0]:
             if result['sigma'] <= 0:
                 st.success(f"Mặt cắt đập thỏa mãn điều kiện không kéo (σ = {result['sigma']:.2f} T/m² ≤ 0)")
             else:
-                st.warning(f"Mặt cắt đập có ứng suất kéo ở mép thượng lưu (σ = {result['sigma']:.2f} T/m² > 0)")
+                st.warning(f"Mặt cắt đập có ứng suất ở mép thượng lưu (σ = {result['sigma']:.2f} T/m² > 0)")
             
             # Hiển thị thông tin về số vòng lặp
             st.info(f"Số vòng lặp thực tế: {result['iterations']} / {result.get('max_iterations', max_iterations)} (tối đa)")
