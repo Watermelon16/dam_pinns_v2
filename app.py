@@ -354,7 +354,7 @@ with tabs[0]:
             st.info(f"Thời gian tính toán: {result['computation_time']:.2f} giây")
             
             # Tạo tabs cho các biểu đồ
-            result_tabs = st.tabs(["Mặt cắt đập", "Biểu đồ hàm mất mát", "Xuất báo cáo"])
+            result_tabs = st.tabs(["Mặt cắt đập", "Biểu đồ hàm mất mát", "Xuất báo cáo","Mặt cắt thực tế"])
             
             # Tab mặt cắt đập
             with result_tabs[0]:
