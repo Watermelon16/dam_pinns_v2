@@ -428,7 +428,7 @@ def create_actual_dam_profile(H_opt, n, m, xi, H_total, B_top):
     fig.add_trace(go.Scatter(x=[x7, x3], y=[y7, y3], mode='lines', line=dict(dash='dot', color='black'), showlegend=False))
 
     # Kích thước Hₜ
-    fig.add_annotation(x=x1 - 4.5, y=H_total / 2, text=f"Hₜ = {H_total:.2f} m", showarrow=False, font=dict(size=14))
+    fig.add_annotation(x=x1 - 7, y=H_total / 2, text=f"Hₜ = {H_total:.2f} m", showarrow=False, font=dict(size=14))
     fig.add_shape(type="line", x0=x1 - 2.0, y0=0, x1=x1 - 2.0, y1=H_total, line=dict(width=1))
     fig.add_shape(type="line", x0=x1 - 3.0, y0=0, x1=x1 - 1.0, y1=0, line=dict(width=1))
     fig.add_shape(type="line", x0=x1 - 3.0, y0=H_total, x1=x1 - 1.0, y1=H_total, line=dict(width=1))
@@ -525,9 +525,9 @@ def export_actual_dam_profile_to_dxf(H_opt, n, m, xi, H_total, B_top, filename="
         msp.add_line(points[i], points[i + 1])
 
     # Ghi kích thước
-    msp.add_text(f"Hₜ = {H_total:.2f} m", dxfattribs={'height': 1.5}).dxf.insert = (x1 - 5, H_total / 2)
+    msp.add_text(f"H = {H_total:.2f} m", dxfattribs={'height': 1.5}).dxf.insert = (x1 - 8, H_total / 2)
     msp.add_text(f"B = {B:.2f} m", dxfattribs={'height': 1.5}).dxf.insert = ((x1 + x4) / 2, -3)
-    msp.add_text(f"Bđ = {B_top:.2f} m", dxfattribs={'height': 1.5}).dxf.insert = ((x5 + x6) / 2, H_total + 3)
+    msp.add_text(f"B_t = {B_top:.2f} m", dxfattribs={'height': 1.5}).dxf.insert = ((x5 + x6) / 2, H_total + 3)
 
 
     # Xuất ra file
