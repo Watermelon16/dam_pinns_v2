@@ -350,7 +350,7 @@ with tabs[0]:
                 st.error(f"Mặt cắt đập KHÔNG thỏa mãn điều kiện ổn định (K = {result['K']:.2f} < Kc = {result['Kc']:.2f})")
             
             if result['sigma'] <= 0:
-                st.success(f"Mặt cắt đập thỏa mãn điều kiện không kéo (σ = {result['sigma']:.2f} T/m² ≤ 0)")
+                st.success(f"Mặt cắt đập thỏa mãn điều kiện không kéo (σ = {result['sigma']:.2f} T/m² ≈ 0)")
             else:
                 st.warning(f"Mặt cắt đập có ứng suất ở mép thượng lưu (σ = {result['sigma']:.2f} T/m² > 0)")
             
@@ -456,7 +456,7 @@ with tabs[1]:
         if len(history_df) > 0:
             # Hiển thị bảng lịch sử
             st.dataframe(
-                history_df[['id', 'timestamp', 'H', 'gamma_bt', 'gamma_n', 'f', 'C', 'Kc', 'a1', 'n', 'm', 'xi', 'A', 'K', 'sigma']],
+                history_df[['id', 'timestamp', 'H', 'gamma_bt', 'gamma_n', 'f', 'C', 'Kc', 'a1', 'n', 'm', 'xi', 'A', 'K', 'sigma','sigma_2']],
                 use_container_width=True
             )
             
@@ -486,7 +486,8 @@ with tabs[1]:
                             'Tham số ξ',
                             'Diện tích mặt cắt (A)',
                             'Hệ số ổn định (K)',
-                            'Ứng suất mép thượng lưu (σ)',
+                            'Ứng suất mép thượng lưu (σ_TL)',
+                            'Ứng suất mép hạ lưu (σ_HL)',
                             'Số vòng lặp thực tế',
                             'Số vòng lặp tối đa',
                         ],
@@ -504,6 +505,7 @@ with tabs[1]:
                             selected_result['A'],
                             selected_result['K'],
                             selected_result['sigma'],
+                            selected_result['sigma_2'],
                             selected_result['iterations'],
                             selected_result.get('max_iterations', 5000),
                         ]
