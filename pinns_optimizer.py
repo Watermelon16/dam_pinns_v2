@@ -490,3 +490,45 @@ else:
             B_top=B_top
         )
         st.plotly_chart(fig, use_container_width=True)
+
+# Xuất mặt cắt đập thực tế sang .dxf bằng ezdxf
+import ezdxf
+
+def export_actual_dam_profile_to_dxf(H_opt, n, m, xi, H_total, B_top, filename="mat_cat_dap.dxf"):
+    B = H_opt * (m + n * (1 - xi))
+    H = H_opt
+
+    # Các điểm định hình mặt cắt
+    x1, y1 = 0, 0
+    x2, y2 = B - m * H, (1 - xi) * H
+    x3, y3 = x2, H
+    x4, y4 = B, 0
+    x5, y5 = x2, H_total
+    x6, y6 = x5 + B_top, H_total
+    x8, y8 = x6, 0
+    slope_34 = (y4 - y3) / (x4 - x3)
+    y7 = y3 + slope_34 * (x6 - x3)
+    x7 = x6
+
+    points = [
+        (x1, y1), (x2, y2), (x3, y3),
+        (x5, y5), (x6, y6), (x7, y7),
+        (x4, y4), (x1, y1)
+    ]
+
+    # Tạo file DXF
+    doc = ezdxf.new(dxfversion='R2010')
+    msp = doc.modelspace()
+
+    # Vẽ đa giác
+    for i in range(len(points) - 1):
+        msp.add_line(points[i], points[i + 1])
+
+    # Ghi kích thước
+    msp.add_text(f"Hₜ = {H_total:.2f} m", dxfattribs={'height': 1.5}).set_pos((x1 - 5, H_total / 2))
+    msp.add_text(f"B = {B:.2f} m", dxfattribs={'height': 1.5}).set_pos(((x1 + x4) / 2, -3))
+    msp.add_text(f"Bđ = {B_top:.2f} m", dxfattribs={'height': 1.5}).set_pos(((x5 + x6) / 2, H_total + 3))
+
+    # Xuất ra file
+    doc.saveas(filename)
+    return filename
