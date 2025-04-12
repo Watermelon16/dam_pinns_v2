@@ -411,7 +411,13 @@ with tabs[0]:
 
             if submitted_real:
                 from pinns_optimizer import create_actual_dam_profile
-                fig_real = create_actual_dam_profile(result['H'], result['B'], H_total, B_top)
+                fig_real = create_actual_dam_profile(
+                            H_opt=result['H'],
+                            n=result['n'],
+                            m=result['m'],
+                            xi=result['xi'],
+                            H_total=H_total,
+                            B_top=B_top)
                 st.plotly_chart(fig_real, use_container_width=True)
 
 
