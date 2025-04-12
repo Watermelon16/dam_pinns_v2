@@ -401,15 +401,11 @@ def plot_loss_curve(loss_history):
 
 
 
-
-# --- Hàm tạo biểu đồ mặt cắt thực tế ---
-import streamlit as st
-import plotly.graph_objects as go
-
 # --- Hàm tạo biểu đồ mặt cắt thực tế sửa đúng logic hình tay ---
 def create_actual_dam_profile(H_opt, n, m, xi, H_total, B_top):
     """
-    Vẽ mặt cắt thực tế của đập bê tông trọng lực dựa trên hình tay với các điểm 1 đến 8.
+    Vẽ mặt cắt thực tế của đập bê tông trọng lực dựa trên hình tay với các điểm 1 đến 8,
+    bao gồm chú thích Hđ, Bđ, Bđd, n, m và đường nét đứt từ điểm 7 về 3.
     """
     # Các giá trị cơ bản
     B = H_opt * (m + n * (1 - xi))
@@ -426,34 +422,47 @@ def create_actual_dam_profile(H_opt, n, m, xi, H_total, B_top):
     x8, y8 = x6, 0
 
     # Tính điểm 7 là giao tuyến giữa đoạn 6–8 (x = x6) và đoạn 3–4
-    # đoạn 3–4: (x3, y3) đến (x4, y4)
     slope_34 = (y4 - y3) / (x4 - x3)
     y7 = y3 + slope_34 * (x6 - x3)
-    x7 = x6  # vì 6–8 là đường thẳng đứng
-
-    # Tập hợp các điểm vẽ mặt cắt
-    # Mặt cắt tối ưu: 1–3–2–4–1
-    x_opt = [x1, x3, x2, x4, x1]
-    y_opt = [y1, y3, y2, y4, y1]
-
-    # Phần mở rộng đỉnh đập: 3–5–6–7–2–3
-    x_ext = [x3, x5, x6, x7, x2, x3]
-    y_ext = [y3, y5, y6, y7, y2, y3]
+    x7 = x6
 
     # Vẽ bằng plotly
     fig = go.Figure()
 
-    fig.add_trace(go.Scatter(x=x_opt, y=y_opt, fill='toself', mode='lines', name='Mặt cắt tối ưu'))
-    fig.add_trace(go.Scatter(x=x_ext, y=y_ext, fill='toself', mode='lines', name='Phần đỉnh mở rộng'))
+    # Toàn bộ mặt cắt bê tông (gồm cả phần dưới và mở rộng)
+    x_full = [x1, x3, x5, x6, x7, x2, x4, x1]
+    y_full = [y1, y3, y5, y6, y7, y2, y4, y1]
+    fig.add_trace(go.Scatter(x=x_full, y=y_full, fill='toself', mode='lines', line=dict(color='gray'), name='Đập bê tông'))
+
+    # Nét đứt từ điểm 7 → 3
+    fig.add_trace(go.Scatter(x=[x7, x3], y=[y7, y3], mode='lines', line=dict(dash='dot', color='black'), showlegend=False))
+
+    # Ghi kích thước Hđ
+    fig.add_annotation(x=x5 - 1, y=(y1 + y5) / 2, text="H", showarrow=False, font=dict(size=14))
+    fig.add_shape(type="line", x0=x5 - 0.3, y0=y1, x1=x5 - 0.3, y1=y5, line=dict(width=1, dash='dot'))
+
+    # Ghi kích thước Bₜ (đáy)
+    fig.add_annotation(x=(x1 + x4) / 2, y=-1.5, text="B", showarrow=False, font=dict(size=14))
+    fig.add_shape(type="line", x0=x1, y0=-1, x1=x4, y1=-1, line=dict(width=1))
+
+    # Ghi kích thước Bₜ₋₋d (đỉnh)
+    fig.add_annotation(x=(x5 + x6) / 2, y=H_total + 0.8, text="Bₜ", showarrow=False, font=dict(size=14))
+    fig.add_shape(type="line", x0=x5, y0=H_total + 0.5, x1=x6, y1=H_total + 0.5, line=dict(width=1))
+
+    # Ghi nhãn hệ số n (dọc mái hạ lưu)
+    fig.add_annotation(x=(x1 + x3) / 2 + 0.5, y=(y1 + y3) / 2, text="n", showarrow=False, textangle=-45, font=dict(size=14))
+
+    # Ghi nhãn hệ số m (dọc mái thượng lưu)
+    fig.add_annotation(x=(x2 + x4) / 2 - 0.5, y=(y2 + y4) / 2, text="m", showarrow=False, textangle=45, font=dict(size=14))
 
     fig.update_layout(
         title="Mặt cắt thực tế của đập bê tông trọng lực",
         xaxis_title="Chiều rộng (m)",
         yaxis_title="Chiều cao (m)",
         xaxis=dict(scaleanchor="y", scaleratio=1),
-        showlegend=True,
+        showlegend=False,
         width=800,
-        height=550,
+        height=600,
         plot_bgcolor='white'
     )
 
@@ -470,7 +479,7 @@ else:
     with st.form("actual_profile_form"):
         st.markdown("#### Nhập thông số đập thực tế")
         H_total = st.number_input("Chiều cao đập thực tế Hₜ (m)", min_value=result['H'], value=result['H'] + 10.0, step=1.0)
-        B_top = st.number_input("Chiều rộng đỉnh đập Bₜ (m)", min_value=1.0, value=5.0, step=0.5)
+        B_top = st.number_input("Chiều rộng đỉnh đập Bₜ₋₋d (m)", min_value=1.0, value=5.0, step=0.5)
         submitted = st.form_submit_button("Vẽ mặt cắt thực tế")
 
     if submitted:
