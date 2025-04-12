@@ -76,6 +76,7 @@ class DamDatabase:
                     A REAL,
                     K REAL,
                     sigma REAL,
+                    sigma_2 REAL,
                     iterations INTEGER,
                     max_iterations INTEGER,
                     computation_time REAL
@@ -118,6 +119,7 @@ class DamDatabase:
                     result.get('A', 0),
                     result.get('K', 0),
                     result.get('sigma', 0),
+                    result.get('sigma_2', 0),
                     result.get('iterations', 0),
                     result.get('max_iterations', 5000),
                     result.get('computation_time', 0)
@@ -126,8 +128,8 @@ class DamDatabase:
                 # Thêm vào cơ sở dữ liệu
                 cursor.execute('''
                 INSERT INTO dam_results (
-                    timestamp, H, gamma_bt, gamma_n, f, C, Kc, a1, n, m, xi, A, K, sigma, iterations, max_iterations, computation_time
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    timestamp, H, gamma_bt, gamma_n, f, C, Kc, a1, n, m, xi, A, K, sigma,sigma_2, iterations, max_iterations, computation_time
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
                 ''', data)
                 
                 conn.commit()
@@ -202,7 +204,7 @@ class DamDatabase:
                 params = []
                 
                 for key, value in kwargs.items():
-                    if key in ['id', 'H', 'gamma_bt', 'gamma_n', 'f', 'C', 'Kc', 'a1', 'n', 'm', 'xi', 'A', 'K', 'sigma', 'iterations']:
+                    if key in ['id', 'H', 'gamma_bt', 'gamma_n', 'f', 'C', 'Kc', 'a1', 'n', 'm', 'xi', 'A', 'K', 'sigma', 'sigma_2','iterations']:
                         query += f' AND {key} = ?'
                         params.append(value)
                 
