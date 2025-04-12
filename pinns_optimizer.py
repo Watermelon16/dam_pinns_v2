@@ -434,16 +434,16 @@ def create_actual_dam_profile(H_opt, n, m, xi, H_total, B_top):
     fig.add_shape(type="line", x0=x1 - 1.5, y0=H_total, x1=x1 - 0.5, y1=H_total, line=dict(width=1))
 
     # Kích thước B
-    fig.add_annotation(x=(x1 + x4) / 2, y=-3.5, text=f"B = {B:.2f} m", showarrow=False, font=dict(size=14))
+    fig.add_annotation(x=(x1 + x4) / 2, y=-4.0, text=f"B = {B:.2f} m", showarrow=False, font=dict(size=14))
     fig.add_shape(type="line", x0=x1, y0=-3.0, x1=x4, y1=-3.0, line=dict(width=1))
     fig.add_shape(type="line", x0=x1, y0=-4, x1=x1, y1=-2.0, line=dict(width=1))
     fig.add_shape(type="line", x0=x4, y0=-4, x1=x4, y1=-2.0, line=dict(width=1))
 
     # Kích thước Bđ
     fig.add_annotation(x=(x5 + x6) / 2, y=H_total + 2.5, text=f"Bđ = {B_top:.2f} m", showarrow=False, font=dict(size=14))
-    fig.add_shape(type="line", x0=x5, y0=H_total + 2.0, x1=x6, y1=H_total + 1.0, line=dict(width=1))
-    fig.add_shape(type="line", x0=x5, y0=H_total + 0.5, x1=x5, y1=H_total + 1.5, line=dict(width=1))
-    fig.add_shape(type="line", x0=x6, y0=H_total + 0.5, x1=x6, y1=H_total + 1.5, line=dict(width=1))
+    fig.add_shape(type="line", x0=x5, y0=H_total + 2.0, x1=x6, y1=H_total + 2.0, line=dict(width=1))
+    fig.add_shape(type="line", x0=x5, y0=H_total + 1.0, x1=x5, y1=H_total + 1.0, line=dict(width=1))
+    fig.add_shape(type="line", x0=x6, y0=H_total + 3.0, x1=x6, y1=H_total + 3.0, line=dict(width=1))
 
     # Hệ số n tại đoạn 1–2
     angle_n = math.degrees(math.atan2(y2 - y1, x2 - x1))
