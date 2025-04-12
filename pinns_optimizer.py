@@ -525,9 +525,10 @@ def export_actual_dam_profile_to_dxf(H_opt, n, m, xi, H_total, B_top, filename="
         msp.add_line(points[i], points[i + 1])
 
     # Ghi kích thước
-    msp.add_text(f"Hₜ = {H_total:.2f} m", dxfattribs={'height': 1.5}).set_pos((x1 - 5, H_total / 2))
-    msp.add_text(f"B = {B:.2f} m", dxfattribs={'height': 1.5}).set_pos(((x1 + x4) / 2, -3))
-    msp.add_text(f"Bđ = {B_top:.2f} m", dxfattribs={'height': 1.5}).set_pos(((x5 + x6) / 2, H_total + 3))
+    msp.add_text(f"Hₜ = {H_total:.2f} m", dxfattribs={'height': 1.5}).dxf.insert = (x1 - 5, H_total / 2)
+    msp.add_text(f"B = {B:.2f} m", dxfattribs={'height': 1.5}).dxf.insert = ((x1 + x4) / 2, -3)
+    msp.add_text(f"Bđ = {B_top:.2f} m", dxfattribs={'height': 1.5}).dxf.insert = ((x5 + x6) / 2, H_total + 3)
+
 
     # Xuất ra file
     doc.saveas(filename)
