@@ -81,7 +81,7 @@ def compute_physics(n, xi, m, H, gamma_bt, gamma_n, f, C, a1):
 
 # Hàm mất mát cải tiến
 def loss_function(sigma, K, A, Kc, alpha):
-    k_factor = 1.02  # Có thể điều chỉnh lên 1.05 nếu cần dư ổn định
+    k_factor = 1.0  # Có thể điều chỉnh lên 1.05 nếu cần dư ổn định
     K_min = Kc * k_factor
     BIG_PENALTY = 1e7
     
