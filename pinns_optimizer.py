@@ -78,7 +78,7 @@ def compute_physics(n, xi, m, H, gamma_bt, gamma_n, f, C, a1):
     Fgt = 0.5 * gamma_n * H**2
     K = Fct / Fgt
     A = 0.5 * H**2 * (m + n * (1 - xi)**2)
-    return sigma, sigma_2, K, A, G, W1, W2, Wt, Fct, Fgt, B, M0, G1, G2, W2_1, W2_2, lG1, lG2, lt, l2, l22, l1, P
+    return sigma, K, A, G, W1, W2, Wt, Fct, Fgt, B, M0, G1, G2, W2_1, W2_2, lG1, lG2, lt, l2, l22, l1, P,sigma_2
 
 # Hàm mất mát cải tiến
 def loss_function(sigma, K, A, Kc, alpha):
@@ -150,7 +150,7 @@ def optimize_dam_section(H, gamma_bt, gamma_n, f, C, Kc, a1, max_iterations=5000
         n, m, xi = model(data)
         
     # Tính toán các đại lượng vật lý với tham số tối ưu
-    sigma, sigma_2, K, A, G, W1, W2, Wt, Fct, Fgt, B, M0, G1, G2, W2_1, W2_2, lG1, lG2, lt, l2, l22, l1, P = compute_physics(n, xi, m, H, gamma_bt, gamma_n, f, C, a1)
+    sigma, K, A, G, W1, W2, Wt, Fct, Fgt, B, M0, G1, G2, W2_1, W2_2, lG1, lG2, lt, l2, l22, l1, P,sigma_2 = compute_physics(n, xi, m, H, gamma_bt, gamma_n, f, C, a1)
     
     # Tính độ lệch tâm
     e = B/2 - M0/P
