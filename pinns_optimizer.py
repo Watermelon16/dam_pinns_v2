@@ -330,8 +330,8 @@ def create_force_diagram_plotly(H, n, m, xi):
 
     fig.update_layout(
         title=f"Sơ đồ lực và phân bố áp lực (H = {H} m)",
-        xaxis_title="Khoảng cách(m)",
-        yaxis_title="Cao độ (m)",
+        xaxis_title="Khoảng cách (m)",
+        yaxis_title="Chiều cao (m)",
         width=800,
         height=600,
         showlegend=False,
@@ -455,7 +455,7 @@ def create_actual_dam_profile(H_opt, n, m, xi, H_total, B_top):
 
     fig.update_layout(
         title="Mặt cắt thực tế của đập bê tông trọng lực",
-        xaxis_title="Chiều rộng (m)",
+        xaxis_title="Khoảng cách (m)",
         yaxis_title="Chiều cao (m)",
         xaxis=dict(scaleanchor="y", scaleratio=1),
         showlegend=False,
