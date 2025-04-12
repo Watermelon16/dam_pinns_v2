@@ -5,3 +5,4 @@ pandas
 plotly
 matplotlib
 openpyxl
+ezdxf>=1.0.0

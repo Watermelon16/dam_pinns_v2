@@ -14,6 +14,8 @@ from io import BytesIO
 import sqlite3
 import threading
 from contextlib import contextmanager
+import ezdxf
+
 
 # Import các module tùy chỉnh
 from pinns_optimizer import optimize_dam_section, create_force_diagram_plotly, plot_loss_curve, export_actual_dam_profile_to_dxf
