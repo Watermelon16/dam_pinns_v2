@@ -532,7 +532,7 @@ with st.sidebar:
     **Các tính năng chính:**
     - Tính toán tối ưu mặt cắt đập bê tông trọng lực
     - Hiển thị biểu đồ mặt cắt đập và sơ đồ lực
-    - Hiển thị mặt cắt thực tế đập bê tông
+    - Vẽ mặt cắt thực tế đập bê tông
     - Hiển thị biểu đồ hàm mất mát
     - Xuất báo cáo Excel
     - Lưu trữ và xem lại lịch sử tính toán
@@ -545,3 +545,4 @@ with st.sidebar:
     
     st.markdown("---")
     st.markdown("© 2025 - Công cụ tính toán mặt cắt kinh tế đập bê tông trọng lực")
+    st.markdown("Nhóm tác giả: TS. Lê Hồng Phương, Nguyễn Quang Long, Trương Thái Đức Dương - Trường đại học Thủy lợi")
