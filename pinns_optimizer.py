@@ -403,65 +403,48 @@ def plot_loss_curve(loss_history):
 
 
 # --- Hàm tạo biểu đồ mặt cắt thực tế ---
+import streamlit as st
+import plotly.graph_objects as go
+
+# --- Hàm tạo biểu đồ mặt cắt thực tế sửa đúng logic hình tay ---
 def create_actual_dam_profile(H_opt, n, m, xi, H_total, B_top):
     """
-    Tạo mặt cắt thực tế từ mặt cắt tối ưu bằng cách thêm đỉnh đập nối tiếp phía trên.
-
-    Parameters:
-    - H_opt: chiều cao mặt cắt tối ưu
-    - n, m, xi: tham số hình học của mặt cắt tối ưu
-    - H_total: chiều cao đập thực tế
-    - B_top: chiều rộng đỉnh đập
+    Vẽ mặt cắt thực tế của đập bê tông trọng lực dựa trên hình tay với các điểm 1 đến 8.
     """
-    # Tính các điểm 1, 2, 3, 4 (tối ưu)
-    x0 = 0
-    x1 = n * H_opt * (1 - xi)
-    x3 = x1
-    x4 = x3 + m * H_opt
+    # Các giá trị cơ bản
+    B = H_opt * (m + n * (1 - xi))
+    x1, y1 = 0, 0                           # Điểm 1
+    x4, y4 = B, 0                           # Điểm 4
+    x3, y3 = n * (1 - xi) * H_opt, H_opt    # Điểm 3
+    x2, y2 = B - m * H_opt, H_opt           # Điểm 2
 
-    y0 = 0
-    y1 = H_opt * (1 - xi)
-    y2 = H_opt
-    yT = H_total
+    # Điểm 5 và 6 (đỉnh đập thực tế)
+    x5, y5 = x3, H_total
+    x6, y6 = x3 + B_top, H_total
 
-    # Tọa độ điểm 1 → 4
-    p1 = (x0, y0)
-    p2 = (x1, y1)
-    p3 = (x1, y2)
-    p4 = (x4, y0)
+    # Điểm 8 có cùng x với điểm 6, y = 0
+    x8, y8 = x6, 0
 
-    # Tính điểm 6, 5 từ B_top và H_total
-    xt3 = x1 + (m * H_opt - B_top) / 2
-    xt4 = xt3 + B_top
+    # Tính điểm 7 là giao tuyến giữa đoạn 6–8 (x = x6) và đoạn 3–4
+    # đoạn 3–4: (x3, y3) đến (x4, y4)
+    slope_34 = (y4 - y3) / (x4 - x3)
+    y7 = y3 + slope_34 * (x6 - x3)
+    x7 = x6  # vì 6–8 là đường thẳng đứng
 
-    # Tính đường thẳng qua 6-7, cắt đoạn 3-4
-    # Gọi 6 = (xt3, H_total), 7 là giao với đoạn (p3)→(p4)
-    x6, y6 = xt3, yT
-    x3_, y3_ = x1, y2
-    x4_, y4_ = x4, y0
+    # Tập hợp các điểm vẽ mặt cắt
+    # Mặt cắt tối ưu: 1–3–2–4–1
+    x_opt = [x1, x3, x2, x4, x1]
+    y_opt = [y1, y3, y2, y4, y1]
 
-    # Tìm giao điểm đường thẳng: y = y6 + a(x - x6) với đoạn (3)-(4)
-    a = (y6 - y2) / (xt3 - x1)
-    x7 = (y2 - y0 + a * x6 - a * x4) / (a - (y2 - y0) / (x1 - x4))
-    y7 = y0 + (y2 - y0) / (x1 - x4) * (x7 - x4)
+    # Phần mở rộng đỉnh đập: 3–5–6–7–2–3
+    x_ext = [x3, x5, x6, x7, x2, x3]
+    y_ext = [y3, y5, y6, y7, y2, y3]
 
-    # Các điểm hình học mới
-    p5 = (xt3, yT)
-    p6 = (xt4, yT)
-    p7 = (x7, y7)
-
-    # Vẽ mặt cắt
+    # Vẽ bằng plotly
     fig = go.Figure()
 
-    # Mặt cắt tối ưu (tam giác)
-    x_opt = [p1[0], p2[0], p3[0], p4[0], p1[0]]
-    y_opt = [p1[1], p2[1], p3[1], p4[1], p1[1]]
     fig.add_trace(go.Scatter(x=x_opt, y=y_opt, fill='toself', mode='lines', name='Mặt cắt tối ưu'))
-
-    # Đỉnh đập thực tế (hình thang hoặc hình 6 cạnh)
-    x_real = [p3[0], p5[0], p6[0], p7[0], p4[0], p3[0]]
-    y_real = [p3[1], p5[1], p6[1], p7[1], p4[1], p3[1]]
-    fig.add_trace(go.Scatter(x=x_real, y=y_real, fill='toself', mode='lines', name='Đỉnh đập'))
+    fig.add_trace(go.Scatter(x=x_ext, y=y_ext, fill='toself', mode='lines', name='Phần đỉnh mở rộng'))
 
     fig.update_layout(
         title="Mặt cắt thực tế của đập bê tông trọng lực",
@@ -491,5 +474,12 @@ else:
         submitted = st.form_submit_button("Vẽ mặt cắt thực tế")
 
     if submitted:
-        fig = create_actual_dam_profile(H_opt=result['H'], n=result['n'], m=result['m'], xi=result['xi'], H_total=H_total, B_top=B_top)
+        fig = create_actual_dam_profile(
+            H_opt=result['H'],
+            n=result['n'],
+            m=result['m'],
+            xi=result['xi'],
+            H_total=H_total,
+            B_top=B_top
+        )
         st.plotly_chart(fig, use_container_width=True)
