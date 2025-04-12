@@ -405,72 +405,53 @@ import math
 
 # --- Hàm tạo biểu đồ mặt cắt thực tế đúng theo sơ đồ 1–8 ---
 def create_actual_dam_profile(H_opt, n, m, xi, H_total, B_top):
-    """
-    Vẽ mặt cắt thực tế gồm 8 điểm từ sơ đồ kỹ thuật:
-    - 1 → 2 → 3 → 4 là mặt cắt tối ưu
-    - 5 → 6 là phần đỉnh đập mở rộng
-    - 7 là giao của đoạn 6–8 với 3–4
-    - 8 là chân đập thẳng dưới điểm 6
-    """
-    # Tính toán các điểm hình học cơ bản
     B = H_opt * (m + n * (1 - xi))
     H = H_opt
 
-    # Điểm 1 – mép hạ lưu đáy đập
     x1, y1 = 0, 0
-
-    # Điểm 2 – chân mái thượng lưu
     x2, y2 = B - m * H, (1 - xi) * H
-
-    # Điểm 3 – đỉnh đoạn  thượng lưu
     x3, y3 = x2, H
-
-    # Điểm 4 – mép hạ lưu đáy đập
     x4, y4 = B, 0
-
-    # Điểm 5 – mép đỉnh đập thượng lưu
     x5, y5 = x2, H_total
-
-    # Điểm 6 – mép đỉnh đập hạ lưu
     x6, y6 = x5 + B_top, H_total
-
-    # Điểm 8 – chân thẳng đứng dưới điểm 6
     x8, y8 = x6, 0
-
-    # Giao tuyến điểm 7: đoạn 6–8 giao với đoạn 3–4
     slope_34 = (y4 - y3) / (x4 - x3)
     y7 = y3 + slope_34 * (x6 - x3)
     x7 = x6
 
-    # Các điểm tạo polygon khép kín: 1–2–3–5–6–7–4–1
     x_poly = [x1, x2, x3, x5, x6, x7, x4, x1]
     y_poly = [y1, y2, y3, y5, y6, y7, y4, y1]
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=x_poly, y=y_poly, fill='toself', mode='lines', line=dict(color='gray')))
 
-    # Vẽ đoạn nét đứt từ điểm 7 → 3
     fig.add_trace(go.Scatter(x=[x7, x3], y=[y7, y3], mode='lines', line=dict(dash='dot', color='black'), showlegend=False))
 
-    # Ghi kích thước Hₜ bên trái
+    # Kích thước Hₜ
     fig.add_annotation(x=x1 - 2.5, y=H_total / 2, text=f"Hₜ = {H_total:.2f} m", showarrow=False, font=dict(size=14))
     fig.add_shape(type="line", x0=x1 - 1.0, y0=0, x1=x1 - 1.0, y1=H_total, line=dict(width=1))
+    fig.add_shape(type="line", x0=x1 - 1.3, y0=0, x1=x1 - 0.7, y1=0, line=dict(width=1))
+    fig.add_shape(type="line", x0=x1 - 1.3, y0=H_total, x1=x1 - 0.7, y1=H_total, line=dict(width=1))
 
-    # Ghi kích thước B ở đáy
+    # Kích thước B
     fig.add_annotation(x=(x1 + x4) / 2, y=-2, text=f"B = {B:.2f} m", showarrow=False, font=dict(size=14))
     fig.add_shape(type="line", x0=x1, y0=-1.5, x1=x4, y1=-1.5, line=dict(width=1))
+    fig.add_shape(type="line", x0=x1, y0=-1.8, x1=x1, y1=-1.2, line=dict(width=1))
+    fig.add_shape(type="line", x0=x4, y0=-1.8, x1=x4, y1=-1.2, line=dict(width=1))
 
-    # Ghi kích thước Bđ ở trên
-    fig.add_annotation(x=(x5 + x6) / 2, y=H_total + 1, text=f"Bđ = {B_top:.2f} m", showarrow=False, font=dict(size=14))
-    fig.add_shape(type="line", x0=x5, y0=H_total + 0.5, x1=x6, y1=H_total + 0.5, line=dict(width=1))
+    # Kích thước Bđ
+    fig.add_annotation(x=(x5 + x6) / 2, y=H_total + 1.5, text=f"Bđ = {B_top:.2f} m", showarrow=False, font=dict(size=14))
+    fig.add_shape(type="line", x0=x5, y0=H_total + 1.0, x1=x6, y1=H_total + 1.0, line=dict(width=1))
+    fig.add_shape(type="line", x0=x5, y0=H_total + 0.7, x1=x5, y1=H_total + 1.3, line=dict(width=1))
+    fig.add_shape(type="line", x0=x6, y0=H_total + 0.7, x1=x6, y1=H_total + 1.3, line=dict(width=1))
 
-    # Ghi hệ số n tại đoạn 1–2
+    # Hệ số n tại đoạn 1–2
     angle_n = math.degrees(math.atan2(y2 - y1, x2 - x1))
-    fig.add_annotation(x=(x1 + x2)/2 - 0.2, y=(y1 + y2)/2 + 0.5, text=f"n = {n:.2f}", textangle=angle_n - 90, showarrow=False, font=dict(size=14))
+    fig.add_annotation(x=(x1 + x2)/2, y=(y1 + y2)/2, text=f"n = {n:.2f}", textangle=angle_n, showarrow=False, font=dict(size=14))
 
-    # Ghi hệ số m tại đoạn 3–4
+    # Hệ số m tại đoạn 3–4
     angle_m = math.degrees(math.atan2(y4 - y3, x4 - x3))
-    fig.add_annotation(x=(x3 + x4)/2 + 0.5, y=(y3 + y4)/2, text=f"m = {m:.2f}", textangle=angle_m - 90, showarrow=False, font=dict(size=14))
+    fig.add_annotation(x=(x3 + x4)/2, y=(y3 + y4)/2, text=f"m = {m:.2f}", textangle=angle_m, showarrow=False, font=dict(size=14))
 
     fig.update_layout(
         title="Mặt cắt thực tế của đập bê tông trọng lực",
