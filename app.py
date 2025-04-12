@@ -371,7 +371,8 @@ with tabs[0]:
                         H=result['H'],
                         n=result['n'],
                         m=result['m'],
-                        xi=result['xi']
+                        xi=result['xi'],
+                        result=result
                     )
                     st.plotly_chart(fig, use_container_width=True)
                 except Exception as e:

@@ -206,7 +206,7 @@ def optimize_dam_section(H, gamma_bt, gamma_n, f, C, Kc, a1, max_iterations=5000
     }
 
 # ==== Biểu đồ lực dùng plotly có tương tác ====
-def create_force_diagram_plotly(H, n, m, xi):
+def create_force_diagram_plotly(H, n, m, xi,result):
     B = H * (m + n * (1 - xi))
     lG1 = H * (m / 6 - n * (1 - xi) / 2)
     lG2 = H * (m / 2 - n * (1 - xi) / 6)
