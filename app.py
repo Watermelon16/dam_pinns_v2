@@ -16,7 +16,7 @@ import threading
 from contextlib import contextmanager
 
 # Import các module tùy chỉnh
-from pinns_optimizer import optimize_dam_section, create_force_diagram_plotly, plot_loss_curve
+from pinns_optimizer import optimize_dam_section, create_force_diagram_plotly, plot_loss_curve, export_actual_dam_profile_to_dxf
 from database import DamDatabase
 
 # Khởi tạo cơ sở dữ liệu
@@ -421,7 +421,6 @@ with tabs[0]:
                 st.plotly_chart(fig_real, use_container_width=True)
 
                 # 👉 Gọi hàm xuất DXF
-                from pinns_optimizer import export_actual_dam_profile_to_dxf
                 dxf_path = export_actual_dam_profile_to_dxf(
                     H_opt=result['H'],
                     n=result['n'],
