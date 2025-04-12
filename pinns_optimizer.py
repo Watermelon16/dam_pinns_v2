@@ -440,7 +440,7 @@ def create_actual_dam_profile(H_opt, n, m, xi, H_total, B_top):
     fig.add_shape(type="line", x0=x4, y0=-4, x1=x4, y1=-2.0, line=dict(width=1))
 
     # Kích thước Bđ
-    fig.add_annotation(x=(x5 + x6) / 2, y=H_total + 3.5, text=f"Bđ = {B_top:.2f} m", showarrow=False, font=dict(size=14))
+    fig.add_annotation(x=(x5 + x6) / 2, y=H_total + 4.0, text=f"Bđ = {B_top:.2f} m", showarrow=False, font=dict(size=14))
     fig.add_shape(type="line", x0=x5, y0=H_total + 2.0, x1=x6, y1=H_total + 2.0, line=dict(width=1))
     fig.add_shape(type="line", x0=x5, y0=H_total + 1.0, x1=x5, y1=H_total + 3.0, line=dict(width=1))
     fig.add_shape(type="line", x0=x6, y0=H_total + 1.0, x1=x6, y1=H_total + 3.0, line=dict(width=1))
