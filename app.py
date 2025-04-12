@@ -49,7 +49,7 @@ def create_excel_report(result):
             'Hệ số mái hạ lưu (m)',
             'Tham số ξ',
             'Diện tích mặt cắt (A)',
-            'Hệ số ổn định (K)',
+            'Hệ số ổn định trượt (K)',
             'Ứng suất mép thượng lưu (σ_TL)',
             'Ứng suất mép hạ lưu (σ_HL)',
             'Chiều rộng đáy đập (B)',
@@ -61,7 +61,6 @@ def create_excel_report(result):
             'Lực chống trượt (Fct)',
             'Lực gây trượt (Fgt)',
             'Tổng momen (M0)'
-            'Hệ số ổn định trượt (K)'
             'Số vòng lặp thực tế',
             'Số vòng lặp tối đa',
             'Thời gian tính toán (giây)'
@@ -90,7 +89,6 @@ def create_excel_report(result):
             result['Fct'],
             result['Fgt'],
             result['M0'],
-            result['K'],
             result['iterations'],
             result.get('max_iterations', 5000),
             result.get('computation_time', 0)
@@ -119,7 +117,6 @@ def create_excel_report(result):
             'T/m',
             'T/m',
             'Tm/m',
-            '',
             'vòng',
             'vòng',
             's'
