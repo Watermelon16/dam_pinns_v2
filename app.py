@@ -51,6 +51,7 @@ def create_excel_report(result):
             'Diện tích mặt cắt (A)',
             'Hệ số ổn định (K)',
             'Ứng suất mép thượng lưu (σ_TL)',
+            'Ứng suất mép hạ lưu (σ_HL)',
             'Chiều rộng đáy đập (B)',
             'Độ lệch tâm (e)',
             'Áp lực nước thượng lưu nằm ngang (W1)',
@@ -60,7 +61,6 @@ def create_excel_report(result):
             'Lực chống trượt (Fct)',
             'Lực gây trượt (Fgt)',
             'Tổng momen (M0)'
-            'Ứng suất mép hạ lưu (σ_HL) '
             'Hệ số ổn định trượt (K)'
             'Số vòng lặp thực tế',
             'Số vòng lặp tối đa',
