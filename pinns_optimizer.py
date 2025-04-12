@@ -242,7 +242,7 @@ def create_force_diagram_plotly(H, n, m, xi):
                 arrowhead=3, arrowsize=1.0, arrowwidth=2, arrowcolor='red')
             fig.add_annotation(
                 x=x + dx, y=y + dy+1,
-                text=f"{label} = {{:.1f}} T/m".format(np.random.uniform(50, 200)),
+                text=f"{label} = {value:.1f} T/m",
                 showarrow=False,
                 font=dict(size=12, color='black')
             )
@@ -256,7 +256,7 @@ def create_force_diagram_plotly(H, n, m, xi):
                 arrowhead=3, arrowsize=1.0, arrowwidth=2, arrowcolor='red')
             fig.add_annotation(
                 x=x + dx, y=y + dy,
-                text=f"{label} = {{:.1f}} T/m".format(np.random.uniform(50, 200)),
+                text=f"{label} = {value:.1f} T/m",
                 showarrow=False,
                 font=dict(size=12, color='black')
             )
@@ -269,7 +269,7 @@ def create_force_diagram_plotly(H, n, m, xi):
                 showarrow=True,arrowhead=3, arrowsize=1.0, arrowwidth=2, arrowcolor='red')
             fig.add_annotation(
                 x=x, y=y,
-                text=f"{label} = {{:.1f}} T/m".format(np.random.uniform(50, 200)),
+                text=f"{label} = {value:.1f} T/m",
                 showarrow=False,
                 font=dict(size=12, color='black'))
 
