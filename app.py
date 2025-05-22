@@ -554,4 +554,11 @@ with st.sidebar:
     
     st.markdown("---")
     st.markdown("© 2025 - Công cụ tính toán mặt cắt kinh tế đập bê tông trọng lực")
-    st.markdown("Nhóm tác giả: TS. Lê Hồng Phương, Nguyễn Quang Long, Trương Thái Đức Dương - Trường đại học Thủy lợi")
+    st.markdown("Nhóm tác giả: TS. Lê Hồng Phương, Nguyễn Quang Long, Trương Thái Đức Dương, Đoàn Quang Trường, Lê Phương Hoa - Trường đại học Thủy lợi")
+    st.markdown("""
+**Tuyên bố miễn trừ trách nhiệm**
+
+Đây là sản phẩm nghiên cứu khoa học được phát triển với mục đích học thuật và thử nghiệm mô hình tính toán. Kết quả từ công cụ chỉ mang tính chất tham khảo và có thể chưa phản ánh đầy đủ mọi điều kiện thực tế.
+
+Nhóm tác giả không chịu trách nhiệm đối với bất kỳ sai số, rủi ro hay hậu quả nào phát sinh từ việc sử dụng kết quả tính toán trong các ứng dụng thực tiễn. Người sử dụng cần tự đánh giá và chịu trách nhiệm khi vận dụng các kết quả vào công việc chuyên môn.
+""")
