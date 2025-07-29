@@ -1,5 +1,5 @@
 streamlit==1.44.1
-torch==2.6.0
+torch== 2.7.1-rc1
 numpy
 pandas
 plotly
