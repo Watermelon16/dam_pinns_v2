@@ -96,7 +96,7 @@ def optimize_dam_section(H, gamma_bt, gamma_n, f, C, Kc, a1, max_iterations=5000
     alpha = 0.01  # hệ số phạt diện tích
     model = OptimalParamsNet().to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3)
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=20, verbose=False)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=20)
 
     data = torch.ones((1, 1), device=device)
     
